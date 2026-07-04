@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EthioMeds Finder</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <header>
+    <h1>EthioMeds Finder</h1>
+    <p>Find available medicines and reserve them from approved pharmacies.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Patient Login</h2>
+
+      <input id="email" type="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+
+      <button id="loginBtn">Login</button>
+      <p id="loginMessage"></p>
+    </section>
+
+    <section class="card">
+      <h2>Search Medicine Availability</h2>
+
+      <input id="searchInput" type="text" placeholder="Medicine name e.g. Paracetamol" />
+      <input id="cityInput" type="text" placeholder="City e.g. Addis Ababa" />
+
+      <button id="searchBtn">Search</button>
+
+      <div id="searchResults"></div>
+    </section>
+
+    <section class="card">
+      <h2>My Reservations</h2>
+      <button id="loadReservationsBtn">Load My Reservations</button>
+
+      <div id="reservationList"></div>
+    </section>
+  </main>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>
