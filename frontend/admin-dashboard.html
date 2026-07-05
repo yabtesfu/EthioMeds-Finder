@@ -1,15 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Dashboard - EthioMeds</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin - EthioMeds Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pharmacy.css">
+  <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
-  <h1>Admin Dashboard</h1>
-  <p>Approve pharmacies and view system statistics here.</p>
+<div class="dash-wrap">
+  <div class="dash-decor">
+    <div class="dash-cap-1"></div>
+    <div class="dash-cap-2"></div>
+    <div class="dash-cap-3"></div>
+    <div class="dash-dot"></div>
+  </div>
 
-  <button onclick="logout()">Logout</button>
+  <div class="nav">
+    <a class="nav-brand" href="index.html">
+      <div class="nav-mark">
+        <div class="nav-mark-ring"></div>
+        <div class="nav-mark-img"><img src="assets/logo-mark.png" alt="ethio-meds mark"></div>
+      </div>
+      <img class="wordmark-dark" src="assets/logo-wordmark.png" alt="ethio-meds finder">
+      <img class="wordmark-light" src="assets/logo-wordmark-light.png" alt="ethio-meds finder">
+    </a>
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()">&#9790;</button>
+      <div class="user-pill">
+        <div id="adminAvatar" class="user-avatar admin-avatar">AD</div>
+        <span id="adminName" class="user-name">Admin</span>
+      </div>
+      <button class="logout-btn" type="button" onclick="logout()">Log out</button>
+    </div>
+  </div>
 
-  <script src="js/api.js"></script>
+  <div class="dash-head">
+    <h1 class="admin-title">Platform overview</h1>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Registered users</div>
+        <div class="stat-value" id="statUsers">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Approved pharmacies</div>
+        <div class="stat-value teal" id="statApproved">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pending approval</div>
+        <div class="stat-value amber" id="statPending">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total reservations</div>
+        <div class="stat-value" id="statReservations">0</div>
+      </div>
+    </div>
+
+    <div class="apps-head">
+      <h2>Pharmacy applications</h2>
+      <span class="waiting-pill"><span class="dot"></span><span id="waitingCount">0</span>&nbsp;waiting</span>
+    </div>
+  </div>
+
+  <div class="res-list">
+    <div id="appsList" class="admin-stack"></div>
+    <div id="appsEmpty" class="res-empty hidden">
+      <div class="res-empty-title">No pharmacy applications</div>
+      <div class="res-empty-sub">New pharmacy profiles will appear here for review.</div>
+    </div>
+  </div>
+
+  <div id="adminToast" class="toast hidden"></div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
 </body>
 </html>
