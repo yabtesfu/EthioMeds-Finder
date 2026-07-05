@@ -143,5 +143,5 @@ vite.config.ts.timestamp-*
 .vite/
 backend/.env
 
-# Uploaded files
-backend/uploads
+.DS_Store
+**/.DS_Store

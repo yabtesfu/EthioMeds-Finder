@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in - EthioMeds Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+<div class="auth-page">
+
+
+  <div class="brand-panel">
+    <div class="brand-decor">
+      <div class="capsule-1"></div>
+      <div class="capsule-2"></div>
+      <div class="capsule-3"></div>
+      <div class="dot-1"></div>
+      <div class="dot-2"></div>
+      <div class="big-circle"></div>
+      <div class="corner-circle"></div>
+    </div>
+
+    <div class="brand-logo">
+      <div class="logo-ring-wrap">
+        <div class="logo-circle"></div>
+        <div class="logo-pulse"></div>
+        <div class="logo-mark-wrap"><img src="assets/logo-mark.png" alt="ethio-meds mark"></div>
+      </div>
+      <img class="brand-wordmark" src="assets/logo-wordmark-light.png" alt="ethio-meds finder">
+    </div>
+
+    <div class="brand-copy">
+      <div class="brand-amharic">እንኳን ደህና መጡ</div>
+      <h1>Find your medicine. Reserve it before you go.</h1>
+      <p>Search pharmacies across Addis Ababa and beyond, check real-time availability, and reserve. No more calling around.</p>
+    </div>
+
+    <div class="brand-steps">
+      <div class="step"><div class="step-num">1</div><span>Search</span></div>
+      <div class="step"><div class="step-num">2</div><span>Reserve</span></div>
+      <div class="step"><div class="step-num accent">3</div><span>Pick up</span></div>
+    </div>
+  </div>
+
+  
+  <div class="form-panel">
+    <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()">☾</button>
+
+    <div class="form-col">
+      <div class="mode-toggle">
+        <div class="mode-thumb"></div>
+        <button class="mode-tab active" type="button">Sign in</button>
+        <button class="mode-tab" type="button" onclick="window.location.href='register.html'">Create account</button>
+      </div>
+
+      <h2>Welcome back</h2>
+      <p class="form-sub">Sign in to search and manage your reservations.</p>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+
+        <div class="field" style="margin-bottom: 10px;">
+          <label for="password">Password</label>
+          <div class="pw-wrap">
+            <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
+            <button id="pwToggle" class="pw-toggle" type="button" onclick="togglePassword()">Show</button>
+          </div>
+        </div>
+
+        <div class="forgot-row"><a href="#">Forgot password?</a></div>
+
+        <div id="formError" class="form-error hidden"></div>
+
+        <button id="submitBtn" class="submit-btn" type="submit">
+          <span id="spinner" class="spinner hidden"></span>
+          <span id="submitLabel">Sign in</span>
+        </button>
+      </form>
+
+      <div class="switch-hint">New to EthioMeds? <a href="register.html">Create an account</a></div>
+
+      <div class="secure-note"><span class="dot"></span><span>Secured with encrypted passwords &amp; JWT sessions</span></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
