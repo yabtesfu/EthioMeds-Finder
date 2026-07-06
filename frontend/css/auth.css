@@ -52,7 +52,6 @@ a:hover { color: var(--teal-strong); text-decoration: underline; }
 input { font-family: 'Sora', sans-serif; }
 input::placeholder { color: var(--placeholder); }
 
-
 @keyframes floatY { 0%,100% { transform: translateY(0) rotate(var(--r, 0deg)); } 50% { transform: translateY(-18px) rotate(var(--r, 0deg)); } }
 @keyframes drift { 0%,100% { transform: translate(0,0) rotate(var(--r, 0deg)); } 33% { transform: translate(10px,-14px) rotate(var(--r, 0deg)); } 66% { transform: translate(-8px,8px) rotate(var(--r, 0deg)); } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
@@ -62,13 +61,11 @@ input::placeholder { color: var(--placeholder); }
 @keyframes spinBoop { 0% { transform: rotate(0) scale(1); } 45% { transform: rotate(200deg) scale(1.15); } 70% { transform: rotate(345deg) scale(.94); } 85% { transform: rotate(370deg) scale(1.04); } 100% { transform: rotate(360deg) scale(1); } }
 @keyframes circleIn { 0% { transform: scale(.4); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-
 .auth-page {
   min-height: 100vh;
   display: flex;
   flex-wrap: wrap;
 }
-
 
 .brand-panel {
   flex: 1 1 420px;
@@ -92,7 +89,6 @@ input::placeholder { color: var(--placeholder); }
 .big-circle { position: absolute; bottom: 10%; left: 14%; width: 240px; height: 240px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.12); }
 .corner-circle { position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,0.05); }
 
-
 .brand-logo { position: relative; display: flex; align-items: center; gap: 18px; }
 .logo-ring-wrap { position: relative; width: 92px; height: 92px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .logo-circle { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid rgba(251,248,244,0.45); animation: circleIn .7s ease .1s both; }
@@ -102,19 +98,16 @@ input::placeholder { color: var(--placeholder); }
 .logo-mark-wrap img { display: block; width: 56px; height: 56px; filter: drop-shadow(0 4px 10px rgba(6,59,51,0.3)); }
 .brand-wordmark { display: block; width: 148px; height: auto; animation: fadeUp .7s ease .5s both; }
 
-
 .brand-copy { position: relative; max-width: 460px; animation: fadeUp .7s ease .15s both; }
 .brand-amharic { font-family: 'Noto Sans Ethiopic', sans-serif; font-size: 15px; color: #F2C79B; margin-bottom: 14px; font-weight: 600; }
 .brand-copy h1 { margin: 0 0 18px; font-size: clamp(30px, 3.4vw, 44px); line-height: 1.12; font-weight: 800; color: #FBF8F4; letter-spacing: -0.025em; text-wrap: pretty; }
 .brand-copy p { margin: 0; font-size: 15.5px; line-height: 1.65; color: rgba(251,248,244,0.82); text-wrap: pretty; }
-
 
 .brand-steps { display: flex; gap: 28px; position: relative; animation: fadeUp .7s ease .3s both; }
 .step { display: flex; align-items: center; gap: 10px; }
 .step-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(251,248,244,0.14); color: #FBF8F4; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 .step-num.accent { background: #D97B29; }
 .step span:last-child { font-size: 13px; color: rgba(251,248,244,0.85); }
-
 
 .form-panel {
   flex: 1 1 480px;
@@ -140,7 +133,6 @@ input::placeholder { color: var(--placeholder); }
 
 .form-col { width: 100%; max-width: 420px; animation: fadeUp .6s ease .2s both; }
 
-
 .mode-toggle { display: flex; background: var(--track); border-radius: 14px; padding: 5px; position: relative; margin-bottom: 32px; transition: background .4s ease; }
 .mode-thumb {
   position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc(50% - 5px);
@@ -160,7 +152,6 @@ input::placeholder { color: var(--placeholder); }
 .form-col h2 { margin: 0 0 6px; font-size: 26px; font-weight: 800; letter-spacing: -0.025em; }
 .form-sub { margin: 0 0 28px; font-size: 14px; color: var(--muted); }
 
-
 .role-section { margin-bottom: 22px; animation: fadeUp .35s ease both; }
 .role-label { font-size: 12.5px; font-weight: 600; color: var(--label); margin-bottom: 10px; letter-spacing: .02em; }
 .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -178,7 +169,6 @@ html[data-theme="dark"] .role-card.selected { background: rgba(41,182,155,0.12);
 .role-card .role-emoji { font-size: 18px; }
 .role-card .role-name { font-size: 13.5px; font-weight: 700; }
 .role-card .role-desc { font-size: 11px; color: var(--muted); }
-
 
 .field { margin-bottom: 18px; }
 .field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--label); margin-bottom: 7px; letter-spacing: .02em; }
@@ -201,16 +191,13 @@ html[data-theme="dark"] .role-card.selected { background: rgba(41,182,155,0.12);
 }
 .pw-toggle:hover { background: rgba(14,143,126,0.08); }
 
-
 .strength { margin-bottom: 6px; animation: fadeUp .3s ease both; }
 .strength-bars { display: flex; gap: 6px; margin-bottom: 6px; }
 .strength-bars div { flex: 1; height: 4px; border-radius: 2px; background: var(--seg-off); transition: background .3s; }
 .strength-text { font-size: 11.5px; font-weight: 600; }
 
-
 .forgot-row { text-align: right; margin-bottom: 6px; }
 .forgot-row a { font-size: 12.5px; font-weight: 600; }
-
 
 .form-error {
   margin: 10px 0 0; padding: 11px 14px; border-radius: 10px;
@@ -225,7 +212,6 @@ html[data-theme="dark"] .role-card.selected { background: rgba(41,182,155,0.12);
   animation: fadeUp .25s ease both;
 }
 .hidden { display: none !important; }
-
 
 .submit-btn {
   width: 100%; margin-top: 20px; border: none;
@@ -244,17 +230,14 @@ html[data-theme="dark"] .role-card.selected { background: rgba(41,182,155,0.12);
   animation: spin .7s linear infinite; display: inline-block;
 }
 
-
 .switch-hint { text-align: center; margin-top: 22px; font-size: 13px; color: var(--muted); }
 .switch-hint a { font-weight: 700; }
-
 
 .secure-note {
   margin-top: 36px; text-align: center; font-size: 11.5px; color: var(--muted);
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .secure-note .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); display: inline-block; }
-
 
 @media (max-width: 920px) {
   .brand-panel { min-height: unset; padding: 36px 28px; gap: 28px; }

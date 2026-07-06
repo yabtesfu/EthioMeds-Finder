@@ -1,15 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Patient Dashboard - EthioMeds</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My reservations - EthioMeds Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-  <h1>Patient Dashboard</h1>
-  <p>Search medicines and manage your reservations here.</p>
+<div class="dash-wrap">
 
-  <button onclick="logout()">Logout</button>
+  <div class="dash-decor">
+    <div class="dash-cap-1"></div>
+    <div class="dash-cap-2"></div>
+    <div class="dash-cap-3"></div>
+    <div class="dash-dot"></div>
+  </div>
 
-  <script src="js/api.js"></script>
+  <div class="nav">
+    <a class="nav-brand" href="index.html">
+      <div class="nav-mark">
+        <div class="nav-mark-ring"></div>
+        <div class="nav-mark-img"><img src="assets/logo-mark.png" alt="ethio-meds mark"></div>
+      </div>
+      <img class="wordmark-dark" src="assets/logo-wordmark.png" alt="ethio-meds finder">
+      <img class="wordmark-light" src="assets/logo-wordmark-light.png" alt="ethio-meds finder">
+    </a>
+    <div class="nav-actions">
+      <div class="nav-search">
+        <input id="navSearchInput" class="nav-search-input hidden" placeholder="Search medicine…">
+        <button id="searchIconBtn" class="search-icon-btn" type="button" title="Search medicine">
+          <span class="lens"></span><span class="handle"></span>
+        </button>
+        <div id="searchDrop" class="search-drop hidden"></div>
+      </div>
+      <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()">☾</button>
+      <div class="user-pill">
+        <div id="userAvatar" class="user-avatar">SA</div>
+        <span id="userName" class="user-name">Selam A.</span>
+      </div>
+      <button class="logout-btn" type="button" onclick="logout()">Log out</button>
+    </div>
+  </div>
+
+  <div class="dash-head">
+    <div class="dash-amharic">ሰላም ሰላም!</div>
+    <div class="dash-head-row">
+      <h1>My reservations</h1>
+      <a class="new-res-btn" href="index.html">+ New reservation</a>
+    </div>
+    <div class="filter-chips">
+      <button class="filter-chip active" type="button" data-filter="all">All · <span id="countAll">0</span></button>
+      <button class="filter-chip" type="button" data-filter="pending">Pending · <span id="countPending">0</span></button>
+      <button class="filter-chip" type="button" data-filter="approved">Approved · <span id="countApproved">0</span></button>
+      <button class="filter-chip" type="button" data-filter="rejected">Rejected · <span id="countRejected">0</span></button>
+    </div>
+  </div>
+
+  <div class="res-list">
+    <div id="resList" style="display: flex; flex-direction: column; gap: 14px;"></div>
+    <div id="resEmpty" class="res-empty hidden">
+      <div class="res-empty-icon"><img src="assets/meds/tablet.png" alt=""></div>
+      <div class="res-empty-title">Nothing here</div>
+      <div class="res-empty-sub">Search for a medicine and reserve it — it will show up here.</div>
+      <a class="new-res-btn" href="index.html">Search medicine</a>
+    </div>
+  </div>
+
+  <div id="dashToast" class="toast hidden"></div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/meds-data.js"></script>
+<script src="js/dashboard.js"></script>
 </body>
 </html>

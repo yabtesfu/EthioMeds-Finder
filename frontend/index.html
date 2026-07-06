@@ -1,47 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EthioMeds Finder</title>
-  <link rel="stylesheet" href="./css/style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EthioMeds Finder - Find medicine near you</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
-  <header>
-    <h1>EthioMeds Finder</h1>
-    <p>Find available medicines and reserve them from approved pharmacies.</p>
-  </header>
 
-  <main>
-    <section class="card">
-      <h2>Patient Login</h2>
+<div class="nav">
+  <a class="nav-brand" href="index.html">
+    <div class="nav-mark">
+      <div class="nav-mark-ring"></div>
+      <div class="nav-mark-img"><img src="assets/logo-mark.png" alt="ethio-meds mark"></div>
+    </div>
+    <img class="wordmark-dark" src="assets/logo-wordmark.png" alt="ethio-meds finder">
+    <img class="wordmark-light" src="assets/logo-wordmark-light.png" alt="ethio-meds finder">
+  </a>
+  <div class="nav-actions">
+  <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()">☾</button>
 
-      <input id="email" type="email" placeholder="Email" />
-      <input id="password" type="password" placeholder="Password" />
+  <div id="guestActions">
+    <a class="nav-signin" href="login.html">Sign in</a>
+    <a class="nav-cta" href="register.html">Create account</a>
+  </div>
 
-      <button id="loginBtn">Login</button>
-      <p id="loginMessage"></p>
-    </section>
+  <div id="userActions" class="hidden">
+    <a id="dashboardLink" class="nav-signin" href="dashboard.html">My Reservations</a>
+    <button class="logout-btn" type="button" onclick="logout()">Log out</button>
+  </div>
+</div>
+</div>
 
-    <section class="card">
-      <h2>Search Medicine Availability</h2>
+<div class="hero">
+  <div class="hero-decor">
+    <div class="hero-cap-1"></div>
+    <div class="hero-cap-2"></div>
+    <div class="hero-cap-3"></div>
+    <div class="hero-dot"></div>
+  </div>
 
-      <input id="searchInput" type="text" placeholder="Medicine name e.g. Paracetamol" />
-      <input id="cityInput" type="text" placeholder="City e.g. Addis Ababa" />
+  <div class="hero-inner">
+    <div class="hero-amharic">መድኃኒት በቀላሉ ያግኙ</div>
+    <h1>Stop calling pharmacies.<br>Search once, reserve online.</h1>
+    <p class="hero-sub">Check which approved pharmacies have your medicine in stock, compare prices, and reserve it for pickup.</p>
 
-      <button id="searchBtn">Search</button>
+    <div class="search-bar">
+      <input id="searchInput" placeholder="Medicine name, e.g. Paracetamol">
+      <select id="citySelect"><option value="">All cities</option></select>
+      <select id="subcitySelect" class="appear hidden"><option value="">All subcities</option></select>
+      <button id="searchBtn" class="search-btn" type="button">Search</button>
+    </div>
 
-      <div id="searchResults"></div>
-    </section>
+    <div class="chips">
+      <span class="chips-label">Popular:</span>
+      <button class="chip" type="button" data-med="Paracetamol"><img src="assets/meds/tablet.png" alt=""><span>Paracetamol</span></button>
+      <button class="chip" type="button" data-med="Aspirin"><img src="assets/meds/tablet.png" alt=""><span>Aspirin</span></button>
+      <button class="chip" type="button" data-med="Amoxicillin"><img src="assets/meds/capsule.png" alt=""><span>Amoxicillin</span></button>
+      <button class="chip" type="button" data-med="Cough Syrup"><img src="assets/meds/syrup.png" alt=""><span>Cough Syrup</span></button>
+      <button class="chip" type="button" data-med="Salbutamol"><img src="assets/meds/inhaler.png" alt=""><span>Salbutamol</span></button>
+    </div>
+  </div>
+</div>
 
-    <section class="card">
-      <h2>My Reservations</h2>
-      <button id="loadReservationsBtn">Load My Reservations</button>
+<div id="resultsSection" class="results hidden">
+  <div class="results-head">
+    <div id="resultsCount" class="results-count"></div>
+    <div class="results-note">Approved pharmacies only</div>
+  </div>
+  <div id="resultsGrid" class="results-grid"></div>
+  <div id="noResults" class="no-results hidden"></div>
+</div>
 
-      <div id="reservationList"></div>
-    </section>
-  </main>
+<div class="how">
+  <div class="how-amharic">እንዴት እንደሚሰራ</div>
+  <h2>How it works</h2>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">1</div>
+      <div class="how-title">Search your medicine</div>
+      <div class="how-text">Type the name or generic name and filter by city and subcity. Only approved pharmacies with real stock appear.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">2</div>
+      <div class="how-title">Reserve online</div>
+      <div class="how-text">Pick a pharmacy and reserve your quantity. If a prescription is required, upload it securely.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num accent">3</div>
+      <div class="how-title">Pick it up</div>
+      <div class="how-text">The pharmacy confirms your reservation and holds the medicine for you. Walk in and collect.</div>
+    </div>
+  </div>
+</div>
 
-  <script src="./js/main.js"></script>
+<div id="reserveModal" class="reserve-modal-overlay hidden">
+  <div class="reserve-modal">
+    <button id="reserveModalClose" class="reserve-modal-close" type="button" aria-label="Close">
+      ×
+    </button>
+
+    <div id="reserveModalForm">
+      <div class="reserve-modal-top">
+        <h3>Reserve medicine</h3>
+        <p class="reserve-modal-sub">Choose the quantity you want to reserve for pickup.</p>
+      </div>
+
+      <div class="reserve-modal-card">
+        <div class="reserve-modal-icon">
+          <img id="reserveModalImage" src="assets/meds/tablet.png" alt="Medicine icon">
+        </div>
+
+        <div class="reserve-modal-info">
+          <div id="reserveModalMedicine" class="reserve-modal-name">Paracetamol 500mg</div>
+          <div id="reserveModalGeneric" class="reserve-modal-generic">Acetaminophen · Tablet</div>
+          <div id="reserveModalPharmacy" class="reserve-modal-pharmacy">Tena Pharmacy · Addis Ababa</div>
+        </div>
+      </div>
+
+      <div id="reserveRxNote" class="reserve-rx-note hidden">
+        This medicine requires a prescription. Upload the required documents before confirming.
+      </div>
+
+      <div id="reservePrescriptionFields" class="reserve-prescription-fields hidden">
+        <div class="reserve-prescription-title">Prescription documents</div>
+        <div class="reserve-prescription-sub">
+          Upload your face photo, government ID, and prescription document.
+        </div>
+
+        <div class="rx-slots reserve-rx-slots">
+          <button id="reserveSlotFace" class="rx-slot" type="button">
+            <span class="rx-slot-plus">+</span>
+            <span class="rx-slot-check hidden"></span>
+            <span class="rx-slot-title">Face photo</span>
+            <span class="rx-slot-hint">JPG or PNG, clear face</span>
+          </button>
+
+          <button id="reserveSlotId" class="rx-slot" type="button">
+            <span class="rx-slot-plus">+</span>
+            <span class="rx-slot-check hidden"></span>
+            <span class="rx-slot-title">Government ID</span>
+            <span class="rx-slot-hint">Kebele ID, passport...</span>
+          </button>
+
+          <button id="reserveSlotPrescription" class="rx-slot" type="button">
+            <span class="rx-slot-plus">+</span>
+            <span class="rx-slot-check hidden"></span>
+            <span class="rx-slot-title">Prescription</span>
+            <span class="rx-slot-hint">Photo or PDF from your doctor</span>
+          </button>
+        </div>
+
+        <input id="reserveFacePhoto" type="file" accept="image/*" class="hidden">
+        <input id="reserveIdCard" type="file" accept="image/*,.pdf" class="hidden">
+        <input id="reservePrescriptionFile" type="file" accept="image/*,.pdf" class="hidden">
+
+        <div class="rx-field reserve-rx-field">
+          <label for="reservePrescriptionExpiry">Prescription expiry date</label>
+          <input id="reservePrescriptionExpiry" type="date">
+        </div>
+      </div>
+
+      <div class="reserve-modal-grid">
+        <div class="reserve-stat">
+          <span class="reserve-stat-label">Unit price</span>
+          <span id="reserveModalPrice" class="reserve-stat-value">25 ETB</span>
+        </div>
+
+        <div class="reserve-stat">
+          <span class="reserve-stat-label">Available stock</span>
+          <span id="reserveModalStock" class="reserve-stat-value">10</span>
+        </div>
+      </div>
+
+      <div class="reserve-field">
+        <label for="reserveQtyInput">Quantity</label>
+
+        <div class="reserve-qty-control">
+          <button id="reserveQtyMinus" class="reserve-qty-btn" type="button">−</button>
+
+          <input
+            id="reserveQtyInput"
+            type="number"
+            min="1"
+            step="1"
+            value="1"
+            placeholder="Enter quantity"
+          >
+
+          <button id="reserveQtyPlus" class="reserve-qty-btn" type="button">+</button>
+        </div>
+
+        <div id="reserveQtyHint" class="reserve-field-hint">
+          Enter a quantity between 1 and available stock.
+        </div>
+      </div>
+
+      <div class="reserve-total-row">
+        <span>Total estimated price</span>
+        <strong id="reserveModalTotal">25 ETB</strong>
+      </div>
+
+      <div id="reserveModalError" class="reserve-modal-error hidden"></div>
+
+      <div class="reserve-modal-actions">
+        <button id="reserveCancelBtn" class="reserve-cancel-btn" type="button">Cancel</button>
+        <button id="reserveConfirmBtn" class="reserve-confirm-btn" type="button">
+          <span id="reserveConfirmLabel">Confirm reservation</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="reserveSuccessPanel" class="reserve-success-panel hidden" role="status" aria-live="polite">
+      <div class="reserve-success-icon">✓</div>
+      <h3 id="reserveSuccessTitle">Reservation created</h3>
+      <p id="reserveSuccessMessage">Your reservation is now pending pharmacy approval.</p>
+
+      <div class="reserve-success-actions">
+        <a class="reserve-success-primary" href="dashboard.html">View my reservations</a>
+        <button id="reserveContinueBtn" class="reserve-success-secondary" type="button">
+          Continue searching
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pharm-cta-wrap">
+  <div class="pharm-cta">
+    <div class="pharm-cta-cap"></div>
+    <div class="pharm-cta-copy">
+      <div class="pharm-cta-title">Run a pharmacy?</div>
+      <div class="pharm-cta-text">Create a pharmacy profile, get approved, and let patients find and reserve your stock online.</div>
+    </div>
+    <a class="pharm-cta-btn" href="register.html">Join as a pharmacy</a>
+  </div>
+</div>
+
+<div class="footer">
+  <img src="assets/logo-mark.png" alt="">
+  <span>EthioMeds Finder · Capstone project by Yabetse Tesfaye</span>
+</div>
+
+<div id="toast" class="toast hidden"><a href="login.html">Sign in</a>&nbsp;to reserve <span id="toastMed"></span></div>
+
+<script src="js/api.js"></script>
+<script src="js/meds-data.js"></script>
+<script src="js/landing.js"></script>
+<script src="js/api.js"></script>
 </body>
 </html>
