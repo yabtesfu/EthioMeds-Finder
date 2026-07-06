@@ -1,15 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Pharmacy Dashboard - EthioMeds</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pharmacy dashboard - EthioMeds Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/pharmacy.css">
 </head>
 <body>
-  <h1>Pharmacy Dashboard</h1>
-  <p>Manage pharmacy profile, inventory, and reservations here.</p>
+<div class="dash-wrap">
+  <div class="dash-decor">
+    <div class="dash-cap-1"></div>
+    <div class="dash-cap-2"></div>
+    <div class="dash-cap-3"></div>
+    <div class="dash-dot"></div>
+  </div>
 
-  <button onclick="logout()">Logout</button>
+  <div class="nav">
+    <a class="nav-brand" href="index.html">
+      <div class="nav-mark">
+        <div class="nav-mark-ring"></div>
+        <div class="nav-mark-img"><img src="assets/logo-mark.png" alt="ethio-meds mark"></div>
+      </div>
+      <img class="wordmark-dark" src="assets/logo-wordmark.png" alt="ethio-meds finder">
+      <img class="wordmark-light" src="assets/logo-wordmark-light.png" alt="ethio-meds finder">
+    </a>
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()">&#9790;</button>
+      <div class="user-pill">
+        <div id="pharmAvatar" class="user-avatar pharm-avatar">PH</div>
+        <span class="user-name" id="pharmName">Pharmacy</span>
+      </div>
+      <button class="logout-btn" type="button" onclick="logout()">Log out</button>
+    </div>
+  </div>
 
-  <script src="js/api.js"></script>
+  <div class="dash-head">
+    <div class="pharm-head-title">
+      <h1>Pharmacy dashboard</h1>
+      <span class="pharm-status pending" id="pharmStatus"><span class="dot"></span>Loading</span>
+    </div>
+    <div class="pharm-sub" id="pharmLocation">Loading pharmacy profile...</div>
+    <div class="filter-chips">
+      <button class="filter-chip active" type="button" data-tab="reservations">Reservations &middot; <span id="pendingCount">0</span></button>
+      <button class="filter-chip" type="button" data-tab="inventory">Inventory &middot; <span id="invCount">0</span></button>
+    </div>
+  </div>
+
+  <div id="profileSetup" class="profile-setup hidden">
+    <div>
+      <div class="profile-setup-title">Finish pharmacy profile</div>
+      <div class="profile-setup-sub">Connect this account to a pharmacy before managing reservations and inventory.</div>
+    </div>
+    <form id="profileSetupForm" class="profile-setup-form">
+      <input id="setupPharmacyName" type="text" placeholder="Pharmacy name">
+      <input id="setupPhone" type="tel" placeholder="Phone number">
+      <input id="setupCity" type="text" placeholder="City">
+      <input id="setupSubCity" type="text" placeholder="Sub city">
+      <input id="setupAddress" type="text" placeholder="Address or landmark">
+      <button id="profileSetupBtn" class="profile-setup-btn" type="submit">Create profile</button>
+    </form>
+  </div>
+
+  <div id="ordersPanel" class="res-list">
+    <div id="ordersList" class="pharm-stack"></div>
+    <div id="ordersEmpty" class="res-empty hidden">
+      <div class="res-empty-title">No reservations yet</div>
+      <div class="res-empty-sub">New requests from patients will appear here.</div>
+    </div>
+  </div>
+
+  <div id="inventoryPanel" class="res-list hidden">
+    <div class="inv-add">
+      <input id="newName" type="text" list="medicineOptions" placeholder="Medicine name, e.g. Amoxicillin 500mg">
+      <datalist id="medicineOptions"></datalist>
+      <input id="newPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Price (ETB)">
+      <input id="newStock" type="number" min="0" step="1" inputmode="numeric" placeholder="Stock">
+      <button id="invAddBtn" class="inv-add-btn" type="button">+ Add</button>
+    </div>
+    <div id="invList" class="pharm-stack"></div>
+    <div id="invEmpty" class="res-empty hidden">
+      <div class="res-empty-title">No inventory yet</div>
+      <div class="res-empty-sub">Add medicines here after your pharmacy profile is approved.</div>
+    </div>
+  </div>
+
+  <div id="pharmToast" class="toast hidden"></div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/meds-data.js"></script>
+<script src="js/pharmacy.js"></script>
 </body>
 </html>
