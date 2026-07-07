@@ -130,8 +130,16 @@ const login = async (req, res) => {
     });
   }
 };
+const getMe = async (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "User profile retrieved successfully",
+    user: req.user,
+  });
+};
 
 module.exports = {
   register,
   login,
+  getMe,
 };
