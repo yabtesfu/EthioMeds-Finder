@@ -37,3 +37,24 @@ The system will have three types of users:
 * HTML
 * CSS
 * JavaScript
+
+## Current API Endpoints
+
+### Authentication
+
+- POST /api/auth/register
+- POST /api/auth/login
+- GET /api/auth/me
+
+### Medicines
+
+- GET /api/medicines
+- GET /api/medicines/:id
+- POST /api/medicines
+
+### Pharmacies
+
+- GET /api/pharmacies
+- POST /api/pharmacies/me
+- GET /api/pharmacies/me
+
