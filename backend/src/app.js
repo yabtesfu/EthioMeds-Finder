@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const pool = require("./config/db");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -37,6 +38,9 @@ app.get("/api/db-test", async (req, res) => {
     });
   }
 });
+
+
+app.use("/api/auth", authRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
