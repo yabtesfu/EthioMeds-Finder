@@ -48,7 +48,7 @@ const getMedicine = async (req, res) => {
 
 const addMedicine = async (req, res) => {
   try {
-    const { name, genericName, description } = req.body;
+    const { name, genericName, description, requiresPrescription } = req.body;
 
     if (!name) {
       return res.status(400).json({
@@ -61,6 +61,7 @@ const addMedicine = async (req, res) => {
       name,
       genericName,
       description,
+      requiresPrescription,
     });
 
     return res.status(201).json({

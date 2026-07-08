@@ -142,3 +142,6 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 backend/.env
+
+# Uploaded files
+backend/uploads

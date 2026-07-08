@@ -10,6 +10,7 @@ const searchAvailableInventory = async ({ search, city }) => {
       m.id AS medicine_id,
       m.name AS medicine_name,
       m.generic_name,
+      m.requires_prescription,
       p.id AS pharmacy_id,
       p.name AS pharmacy_name,
       p.phone,

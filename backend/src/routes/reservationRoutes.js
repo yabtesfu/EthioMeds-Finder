@@ -2,14 +2,16 @@ const express = require("express");
 const reservationController = require("../controllers/reservationController");
 const { protect } = require("../middleware/authMiddleware");
 const authorizeRoles = require("../middleware/roleMiddleware");
+const uploadPrescriptionFiles = require("../middleware/uploadMiddleware");
 
 const router = express.Router();
 
 router.post(
-  "/",
+  "/:id/prescription",
   protect,
   authorizeRoles("patient"),
-  reservationController.createReservation
+  uploadPrescriptionFiles,
+  reservationController.uploadPrescription
 );
 
 router.get(

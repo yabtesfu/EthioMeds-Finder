@@ -187,6 +187,70 @@ const rejectReservation = async (req, res) => {
   }
 };
 
+const uploadPrescription = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { prescriptionExpiryDate } = req.body;
+
+    if (!prescriptionExpiryDate) {
+      return res.status(400).json({
+        success: false,
+        message: "Prescription expiry date is required",
+      });
+    }
+
+    const today = new Date();
+    const expiryDate = new Date(prescriptionExpiryDate);
+
+    if (expiryDate < today) {
+      return res.status(400).json({
+        success: false,
+        message: "Prescription expiry date must be valid and not expired",
+      });
+    }
+
+    if (
+      !req.files ||
+      !req.files.facePhoto ||
+      !req.files.idCard ||
+      !req.files.prescriptionFile
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Face photo, ID card, and prescription file are required",
+      });
+    }
+
+    const reservation = await reservationModel.uploadPrescriptionDocuments({
+      reservationId: id,
+      userId: req.user.id,
+      facePhotoPath: req.files.facePhoto[0].path,
+      idCardPath: req.files.idCard[0].path,
+      prescriptionFilePath: req.files.prescriptionFile[0].path,
+      prescriptionExpiryDate,
+    });
+
+    if (!reservation) {
+      return res.status(404).json({
+        success: false,
+        message: "Reservation not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Prescription documents uploaded successfully",
+      reservation,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to upload prescription documents",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createReservation,
   getMyReservations,
@@ -194,4 +258,5 @@ module.exports = {
   getPharmacyReservations,
   approveReservation,
   rejectReservation,
+  uploadPrescription,
 };

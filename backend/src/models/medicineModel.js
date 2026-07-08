@@ -33,14 +33,14 @@ const getMedicineById = async (id) => {
   return result.rows[0];
 };
 
-const createMedicine = async ({ name, genericName, description }) => {
+const createMedicine = async ({ name, genericName, description, requiresPrescription }) => {
   const query = `
-    INSERT INTO medicines (name, generic_name, description)
-    VALUES ($1, $2, $3)
-    RETURNING id, name, generic_name, description, created_at;
+    INSERT INTO medicines (name, generic_name, description, requires_prescription)
+    VALUES ($1, $2, $3, $4)
+    RETURNING id, name, generic_name, description, requires_prescription, created_at;
   `;
 
-  const values = [name, genericName, description];
+  const values = [name, genericName, description, requiresPrescription || false];
 
   const result = await pool.query(query, values);
   return result.rows[0];

@@ -189,6 +189,50 @@ const approveReservation = async ({ reservationId, pharmacyId }) => {
   }
 };
 
+const uploadPrescriptionDocuments = async ({
+  reservationId,
+  userId,
+  facePhotoPath,
+  idCardPath,
+  prescriptionFilePath,
+  prescriptionExpiryDate,
+}) => {
+  const query = `
+    UPDATE reservations
+    SET
+      face_photo_path = $3,
+      id_card_path = $4,
+      prescription_file_path = $5,
+      prescription_expiry_date = $6,
+      prescription_status = 'submitted'
+    WHERE id = $1
+    AND user_id = $2
+    RETURNING 
+      id,
+      user_id,
+      quantity,
+      status,
+      face_photo_path,
+      id_card_path,
+      prescription_file_path,
+      prescription_expiry_date,
+      prescription_status,
+      created_at;
+  `;
+
+  const values = [
+    reservationId,
+    userId,
+    facePhotoPath,
+    idCardPath,
+    prescriptionFilePath,
+    prescriptionExpiryDate,
+  ];
+
+  const result = await pool.query(query, values);
+  return result.rows[0];
+};
+
 module.exports = {
   createReservation,
   getReservationsByUserId,
@@ -196,4 +240,5 @@ module.exports = {
   cancelReservation,
   approveReservation,
   rejectReservation,
+  uploadPrescriptionDocuments,
 };
