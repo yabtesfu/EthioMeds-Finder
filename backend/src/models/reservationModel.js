@@ -1,42 +1,69 @@
 const pool = require("../config/db");
 
 const createReservation = async ({ userId, pharmacyMedicineId, quantity }) => {
-  const inventoryQuery = `
-    SELECT 
-      pm.id,
-      pm.quantity,
-      pm.is_available,
-      p.is_approved
-    FROM pharmacy_medicines pm
-    JOIN pharmacies p ON pm.pharmacy_id = p.id
-    WHERE pm.id = $1;
-  `;
+  const client = await pool.connect();
 
-  const inventoryResult = await pool.query(inventoryQuery, [pharmacyMedicineId]);
-  const inventory = inventoryResult.rows[0];
+  try {
+    await client.query("BEGIN");
 
-  if (!inventory) {
-    throw new Error("Inventory item not found");
+    const inventoryQuery = `
+      SELECT 
+        pm.id,
+        pm.quantity,
+        pm.is_available,
+        p.is_approved
+      FROM pharmacy_medicines pm
+      JOIN pharmacies p ON pm.pharmacy_id = p.id
+      WHERE pm.id = $1
+      FOR UPDATE OF pm;
+    `;
+
+    const inventoryResult = await client.query(inventoryQuery, [
+      pharmacyMedicineId,
+    ]);
+    const inventory = inventoryResult.rows[0];
+
+    if (!inventory) {
+      throw new Error("Inventory item not found");
+    }
+
+    if (!inventory.is_approved) {
+      throw new Error("Pharmacy is not approved");
+    }
+
+    if (!inventory.is_available || inventory.quantity < quantity) {
+      throw new Error("Requested quantity is not available");
+    }
+
+    await client.query(
+      `
+      UPDATE pharmacy_medicines
+      SET quantity = quantity - $1,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = $2;
+      `,
+      [quantity, pharmacyMedicineId]
+    );
+
+    const query = `
+      INSERT INTO reservations (user_id, pharmacy_medicine_id, quantity, status)
+      VALUES ($1, $2, $3, 'pending')
+      RETURNING id, user_id, pharmacy_medicine_id, quantity, status, created_at;
+    `;
+
+    const values = [userId, pharmacyMedicineId, quantity];
+
+    const result = await client.query(query, values);
+
+    await client.query("COMMIT");
+
+    return result.rows[0];
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
   }
-
-  if (!inventory.is_approved) {
-    throw new Error("Pharmacy is not approved");
-  }
-
-  if (!inventory.is_available || inventory.quantity < quantity) {
-    throw new Error("Requested quantity is not available");
-  }
-
-  const query = `
-    INSERT INTO reservations (user_id, pharmacy_medicine_id, quantity)
-    VALUES ($1, $2, $3)
-    RETURNING id, user_id, pharmacy_medicine_id, quantity, status, created_at;
-  `;
-
-  const values = [userId, pharmacyMedicineId, quantity];
-
-  const result = await pool.query(query, values);
-  return result.rows[0];
 };
 
 const getReservationsByUserId = async (userId) => {
@@ -48,11 +75,13 @@ const getReservationsByUserId = async (userId) => {
       r.created_at,
       m.name AS medicine_name,
       m.generic_name,
+      m.requires_prescription,
       p.name AS pharmacy_name,
       p.phone,
       p.city,
       p.sub_city,
-      pm.price
+      pm.price,
+      r.prescription_file_path
     FROM reservations r
     JOIN pharmacy_medicines pm ON r.pharmacy_medicine_id = pm.id
     JOIN medicines m ON pm.medicine_id = m.id
@@ -89,33 +118,123 @@ const getReservationsByPharmacyId = async (pharmacyId) => {
 };
 
 const cancelReservation = async ({ reservationId, userId }) => {
-  const query = `
-    UPDATE reservations
-    SET status = 'cancelled'
-    WHERE id = $1
-    AND user_id = $2
-    AND status = 'pending'
-    RETURNING id, quantity, status, created_at;
-  `;
+  const client = await pool.connect();
 
-  const result = await pool.query(query, [reservationId, userId]);
-  return result.rows[0];
+  try {
+    await client.query("BEGIN");
+
+    const reservationResult = await client.query(
+      `
+      SELECT
+        r.id,
+        r.quantity,
+        r.status,
+        r.pharmacy_medicine_id
+      FROM reservations r
+      JOIN pharmacy_medicines pm ON r.pharmacy_medicine_id = pm.id
+      WHERE r.id = $1
+      AND r.user_id = $2
+      FOR UPDATE OF r, pm;
+      `,
+      [reservationId, userId]
+    );
+
+    const reservation = reservationResult.rows[0];
+
+    if (!reservation || reservation.status !== "pending") {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    await client.query(
+      `
+      UPDATE pharmacy_medicines
+      SET quantity = quantity + $1,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = $2;
+      `,
+      [reservation.quantity, reservation.pharmacy_medicine_id]
+    );
+
+    const result = await client.query(
+      `
+      UPDATE reservations
+      SET status = 'cancelled'
+      WHERE id = $1
+      RETURNING id, quantity, status, created_at;
+      `,
+      [reservationId]
+    );
+
+    await client.query("COMMIT");
+
+    return result.rows[0];
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 };
 
 const rejectReservation = async ({ reservationId, pharmacyId }) => {
-  const query = `
-    UPDATE reservations r
-    SET status = 'rejected'
-    FROM pharmacy_medicines pm
-    WHERE r.pharmacy_medicine_id = pm.id
-    AND r.id = $1
-    AND pm.pharmacy_id = $2
-    AND r.status = 'pending'
-    RETURNING r.id, r.quantity, r.status, r.created_at;
-  `;
+  const client = await pool.connect();
 
-  const result = await pool.query(query, [reservationId, pharmacyId]);
-  return result.rows[0];
+  try {
+    await client.query("BEGIN");
+
+    const reservationResult = await client.query(
+      `
+      SELECT
+        r.id,
+        r.quantity,
+        r.status,
+        r.pharmacy_medicine_id
+      FROM reservations r
+      JOIN pharmacy_medicines pm ON r.pharmacy_medicine_id = pm.id
+      WHERE r.id = $1
+      AND pm.pharmacy_id = $2
+      FOR UPDATE OF r, pm;
+      `,
+      [reservationId, pharmacyId]
+    );
+
+    const reservation = reservationResult.rows[0];
+
+    if (!reservation || reservation.status !== "pending") {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    await client.query(
+      `
+      UPDATE pharmacy_medicines
+      SET quantity = quantity + $1,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = $2;
+      `,
+      [reservation.quantity, reservation.pharmacy_medicine_id]
+    );
+
+    const result = await client.query(
+      `
+      UPDATE reservations
+      SET status = 'rejected'
+      WHERE id = $1
+      RETURNING id, quantity, status, created_at;
+      `,
+      [reservationId]
+    );
+
+    await client.query("COMMIT");
+
+    return result.rows[0];
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 };
 
 const approveReservation = async ({ reservationId, pharmacyId }) => {
@@ -127,16 +246,13 @@ const approveReservation = async ({ reservationId, pharmacyId }) => {
     const reservationQuery = `
       SELECT
         r.id,
-        r.quantity AS reserved_quantity,
         r.status,
-        pm.id AS inventory_id,
-        pm.quantity AS available_quantity,
         pm.pharmacy_id
       FROM reservations r
       JOIN pharmacy_medicines pm ON r.pharmacy_medicine_id = pm.id
       WHERE r.id = $1
       AND pm.pharmacy_id = $2
-      FOR UPDATE;
+      FOR UPDATE OF r;
     `;
 
     const reservationResult = await client.query(reservationQuery, [
@@ -153,20 +269,6 @@ const approveReservation = async ({ reservationId, pharmacyId }) => {
     if (reservation.status !== "pending") {
       throw new Error("Only pending reservations can be approved");
     }
-
-    if (reservation.available_quantity < reservation.reserved_quantity) {
-      throw new Error("Not enough stock to approve reservation");
-    }
-
-    await client.query(
-      `
-      UPDATE pharmacy_medicines
-      SET quantity = quantity - $1,
-          updated_at = CURRENT_TIMESTAMP
-      WHERE id = $2;
-      `,
-      [reservation.reserved_quantity, reservation.inventory_id]
-    );
 
     const updateResult = await client.query(
       `

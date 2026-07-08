@@ -7,6 +7,13 @@ const uploadPrescriptionFiles = require("../middleware/uploadMiddleware");
 const router = express.Router();
 
 router.post(
+  "/",
+  protect,
+  authorizeRoles("patient"),
+  reservationController.createReservation
+);
+
+router.post(
   "/:id/prescription",
   protect,
   authorizeRoles("patient"),
