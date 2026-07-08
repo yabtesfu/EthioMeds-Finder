@@ -104,7 +104,14 @@ const getReservationsByPharmacyId = async (pharmacyId) => {
       u.full_name AS patient_name,
       u.email AS patient_email,
       m.name AS medicine_name,
-      pm.price
+      m.generic_name,
+      m.requires_prescription,
+      pm.price,
+      r.face_photo_path,
+      r.id_card_path,
+      r.prescription_file_path,
+      r.prescription_expiry_date,
+      r.prescription_status
     FROM reservations r
     JOIN users u ON r.user_id = u.id
     JOIN pharmacy_medicines pm ON r.pharmacy_medicine_id = pm.id

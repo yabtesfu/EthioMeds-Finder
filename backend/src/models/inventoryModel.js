@@ -60,6 +60,7 @@ const getInventoryByPharmacyId = async (pharmacyId) => {
       pm.medicine_id,
       m.name AS medicine_name,
       m.generic_name,
+      m.requires_prescription,
       pm.quantity,
       pm.price,
       pm.is_available,

@@ -2,7 +2,7 @@ const pool = require("../config/db");
 
 const getAllMedicines = async ({ search }) => {
   let query = `
-    SELECT id, name, generic_name, description, created_at
+    SELECT id, name, generic_name, description, requires_prescription, created_at
     FROM medicines
   `;
 
@@ -24,7 +24,7 @@ const getAllMedicines = async ({ search }) => {
 
 const getMedicineById = async (id) => {
   const query = `
-    SELECT id, name, generic_name, description, created_at
+    SELECT id, name, generic_name, description, requires_prescription, created_at
     FROM medicines
     WHERE id = $1;
   `;
