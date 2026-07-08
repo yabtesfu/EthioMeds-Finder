@@ -4,6 +4,8 @@ const pool = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const medicineRoutes = require("./routes/medicineRoutes");
 const pharmacyRoutes = require("./routes/pharmacyRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const inventoryRoutes = require("./routes/inventoryRoutes");
 
 const app = express();
 
@@ -45,6 +47,8 @@ app.get("/api/db-test", async (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/medicines", medicineRoutes);
 app.use("/api/pharmacies", pharmacyRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/inventory", inventoryRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
